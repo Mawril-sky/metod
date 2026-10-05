@@ -96,20 +96,30 @@ public class Main {
      */
     private static void task3() {
         taskStartMessage("3");
+
         int deliveryDistance = 90;
+
+        // Проверка на некорректное расстояние прямо здесь — без выброса исключения
+        if (deliveryDistance < 0 || deliveryDistance > 20000) {
+            System.out.println("Ошибка: неправильно указано расстояние: " + deliveryDistance);
+            taskFinishMessage();
+            return;
+        }
+
         int requiredNumberOfDays = getRequiredNumberOfDays(deliveryDistance);
         System.out.println("Потребуется дней: " + requiredNumberOfDays);
+
         taskFinishMessage();
     }
 
     private static int getRequiredNumberOfDays(int deliveryDistance) {
-        int deliveryDays;
-        int minDistance = 20;
-        int stepDistance = 40;
-        if (deliveryDistance < 0 || deliveryDistance > 20000) {
-            throw new RuntimeException("Неправильно указано расстояние");
+        int stepDistance = 40; // максимум км в день
+
+        // deliveryDistance уже проверен в task3, но можно оставить и тут для безопасности
+        if (deliveryDistance <= 0) {
+            return 0; // или 1, если по ТЗ «минимум 1 день даже для 0 км»
         }
-        deliveryDays = (int) Math.ceil((deliveryDistance + minDistance - 1) / stepDistance) + 1;
-        return deliveryDays;
+
+        return (deliveryDistance + stepDistance - 1) / stepDistance;
     }
 }
